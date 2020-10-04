@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+package dfs_service;
+
+service DFSService {
+	
+	rpc GetStat(Fname) returns (Fstat){}
+
+        rpc GetList(param) returns (stream ListInfo){}
+
+        rpc Fetch(Fname) returns (stream FileBytes){}
+
+        rpc Store(stream StoreBytes) returns (param){}
+
+        rpc Delete(Fname) returns (param){}
+
+	rpc RequestWriteAccess(Fname) returns (param){}
+
+	rpc CallbackList(FileRequest) returns (FileList){}
+
+
+}
+
+message Fname{
+        string filename=1;
+	string cid=18;
+
+}
+
+message Fstat{
+        int64 fsize=2;
+        int64 mdtime=3;
+        int64 crtime=4;
+	uint32 cksum=20;
+}
+
+message ListInfo{
+        string name=5;
+        int32 modtime=6;
+}
+
+message FileBytes{
+        bytes fb=7;
+        int32 len=8;
+}
+
+message StoreBytes{
+        bytes sb=9;
+        string file=10;
+        int32 flen=11;
+	uint32 checksum=19;
+}
+
+message FileRequest{
+	string name=12;
+}
+
+message Response{
+	int64 modtime=14;
+	uint32 checksum=15; 
+	string name=16;
+}
+
+message FileList{
+	repeated Response list=17;
+}
